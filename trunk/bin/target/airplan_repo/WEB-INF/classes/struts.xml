@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+      "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+      "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.devMode" value="true" />
+	<include file="struts-default.xml"/>
+    <package name="tutorial" namespace="/" extends="struts-default">
+	
+	<action name="boardingPass" class="ubc.ece419.pod10.action.user.ViewBoardingPassAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<param name="bookingId">bookingId</param>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+		<result name="success" type="freemarker">/boardingPass.ftl</result>
+	</action>
+	<action name="cancelBooking" class="ubc.ece419.pod10.action.user.CancelBookingAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<param name="bookingId">bookingId</param>
+		<result type="freemarker">/cancelBooking.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="confirmCancel" class="ubc.ece419.pod10.action.user.ConfirmCancelAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<param name="bookingId">bookingId</param>
+		<param name="billingId">billingId</param>
+		<result type="freemarker">/confirmCancel.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="createUser" class="ubc.ece419.pod10.action.user.CreateUserAction" method="execute">
+		<param name="name">name</param>
+		<param name="password">password</param>
+		<param name="emailAddress">emailAddress</param>
+		<param name="passwordCopy">passwordCopy</param>
+		<result name="success" type="redirect-action">
+			<param name="actionName">searchFlightsGui</param>
+			<param name="sessionToken">${sessionToken}</param>		
+		</result>
+	</action>
+	<action name="createUserInput" class="ubc.ece419.pod10.action.BaseAction" method="input">
+		<result name="success" type="freemarker">/newUser.ftl</result>
+	</action>
+	<action name="login" class="ubc.ece419.pod10.action.user.LoginAction" method="execute">
+		<param name="emailAddress">emailAddress</param>
+		<param name="password">password</param>
+		<result name="input" type="freemarker">/signIn.ftl</result>
+		<result name="error" type="freemarker">/signIn.ftl</result>
+		<result name="success" type="redirectAction">
+			<param name="actionName">searchFlightsGui</param>
+			<param name="sessionToken">${sessionToken}</param>
+		</result>
+	</action>
+	<action name="makePayment" class="ubc.ece419.pod10.action.user.UserReserveFlightsAction" method="makePayment">
+		<param name="sessionToken">sessionToken</param>
+		<param name="bookingId">bookingId</param>
+		<param name="subtotal">subtotal</param>
+		<param name="isPayByPoints">isPayByPoints</param>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+		<result name="success" type="freemarker">/makePayment.ftl</result>
+	</action>
+	<action name="makePaymentGui" class="ubc.ece419.pod10.action.user.UserReserveFlightsAction" method="getBillingGuiInput">
+		<param name="sessionToken">sessionToken</param>
+		<param name="bookingId">bookingId</param>
+		<result name="success" type="freemarker">/makePayment_gui.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="modifyTicket" class="ubc.ece419.pod10.action.user.ModifyTicketAction" method="execute">
+		<param name="ticketId">ticketId</param><param name="passengerName">passengerName</param>
+		<param name="seatPreference">seatPreference</param>
+		<param name="mealPreference">mealPreference</param>
+		<param name="sessionToken">sessionToken</param>		
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="success" type="freemarker">/modifyTicket.ftl</result>
+	</action>
+	<action name="modifyTicketGui" class="ubc.ece419.pod10.action.user.ModifyTicketAction" method="getModifyTicketGuiInput">
+		<param name="ticketId">ticketId</param>
+		<param name="sessionToken">sessionToken</param>	
+		<result name="error" type="redirect">/InsessionTokenServerError.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="success" type="freemarker">/modifyTicket_gui.ftl</result>
+	</action>
+	<action name="reserveFlights" class="ubc.ece419.pod10.action.user.UserReserveFlightsAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<param name="flightId">flightId</param>
+		<param name="passengerName">passengerName</param>
+		<param name="seatType">seatType</param>
+		<param name="mealPreference">mealPreference</param>
+		<param name="seatPreference">seatPreference</param>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+		<result name="success" type="freemarker">/reserveFlights.ftl</result>
+	</action>
+	<action name="reserveFlightsGui" class="ubc.ece419.pod10.action.user.UserReserveFlightsAction" method="getReserveGuiInput">
+		<param name="sessionToken">sessionToken</param>
+		<param name="flightId">flightId</param>
+		<param name="seatType">seatType</param>
+		<result name="success" type="freemarker">/reserveFlights_gui.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="reserveFlightsLoop" class="ubc.ece419.pod10.action.user.UserReserveFlightsAction" method="executeLoop">
+		<param name="sessionToken">sessionToken</param>
+		<param name="bookingId">bookingId</param>
+		<param name="flightId">flightId</param>
+		<param name="passengerName">passengerName</param>
+		<param name="seatType">seatType</param>
+		<param name="mealPreference">mealPreference</param>
+		<param name="seatPreference">seatPreference</param>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+		<result name="success" type="freemarker">/reserveFlightsLoop.ftl</result>
+	</action>
+	<action name="reserveFlightsLoopGui" class="ubc.ece419.pod10.action.user.UserReserveFlightsAction" method="getReserveGuiInputLoop">
+		<param name="sessionToken">sessionToken</param>
+		<param name="bookingId">bookingId</param>
+		<param name="flightId">flightId</param>
+		<param name="seatType">seatType</param>
+		<result name="success" type="freemarker">/reserveFlightsLoop_gui.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="searchFlights" class="ubc.ece419.pod10.action.user.UserSearchFlightsAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<param name="destination">destination</param>
+		<param name="origin">origin</param>
+		<param name="departureTime">departureTime</param>
+		<param name="requiredSeats">requiredSeats</param>
+		<param name="seatType">seatType</param>
+		<result name="success" type="freemarker">/searchFlights.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="searchFlightsGui" class="ubc.ece419.pod10.action.user.UserSearchFlightsAction" method="getSearchGuiInput">
+		<param name="sessionToken">sessionToken</param>
+		<result name="success" type="freemarker">/searchFlights_gui.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="searchFlightsLoop" class="ubc.ece419.pod10.action.user.UserSearchFlightsAction" method="executeLoop">
+		<param name="bookingId">bookingId</param>
+		<param name="sessionToken">sessionToken</param>
+		<param name="destination">destination</param>
+		<param name="origin">origin</param>
+		<param name="departureTime">departureTime</param>
+		<param name="requiredSeats">requiredSeats</param>
+		<param name="seatType">seatType</param>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+		<result name="success" type="freemarker">/searchFlightsLoop.ftl</result>
+	</action>
+	<action name="searchFlightsLoopGui" class="ubc.ece419.pod10.action.user.UserSearchFlightsAction" method="getSearchGuiInputLoop">
+		<param name="sessionToken">sessionToken</param>
+		<param name="bookingId">bookingId</param>
+		<result name="success" type="freemarker">/searchFlightsLoop_gui.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="searchFlightsReturnGui" class="ubc.ece419.pod10.action.user.UserSearchFlightsAction" method="getSearchReturnGuiInput">
+		<param name="sessionToken">sessionToken</param>
+		<param name="bookingId">bookingId</param>
+		<param name="origin">origin</param>
+		<param name="destination">destination</param>
+		<result name="success" type="freemarker">/searchFlightsReturn_gui.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="selectManifest" class="ubc.ece419.pod10.action.staff.SelectManifestAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<param name="message">message</param>
+		<param name="selectionList">selectionList</param>
+		<result type="freemarker">/selectManifest.ftl</result>
+		<result name="login" type="redirect">/staffSignIn.ftl</result>
+		<result name="error" type="redirect">/404NotFoundError.ftl</result>
+	</action>
+	<action name="signIn" class="ubc.ece419.pod10.action.BaseAction" method="input">
+		<result type="freemarker">/signIn.ftl</result>
+	</action>
+	<action name="staffCancelBooking" class="ubc.ece419.pod10.action.staff.StaffCancelBookingAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<param name="customerToken">customerToken</param>
+		<param name="bookingId">bookingId</param>
+		<result type="freemarker">/staffCancelBooking.ftl</result>
+		<result name="login" type="redirect">/staffSignIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="staffConfirmCancel" class="ubc.ece419.pod10.action.staff.StaffConfirmCancelAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<param name="customerToken">customerToken</param>
+		<param name="bookingId">bookingId</param>
+		<param name="billingId">billingId</param>
+		<result type="freemarker">/staffConfirmCancel.ftl</result>
+		<result name="login" type="redirect">/staffSignIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="staffGetCustomerId" class="ubc.ece419.pod10.action.staff.StaffGetCustomerAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<param name="email">email</param>
+		<result type="freemarker">/staffGetCustomerId.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="staffHome" class="ubc.ece419.pod10.action.BaseAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<result type="freemarker">/staffHome.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="stafflogin" class="ubc.ece419.pod10.action.staff.StaffLoginAction" method="execute">
+		<param name="emailAddress">emailAddress</param>
+		<param name="password">password</param>
+		<result name="input" type="freemarker">/staffSignIn.ftl</result>
+		<result name="error" type="freemarker">/staffSignIn.ftl</result>
+		<result name="success" type="redirectAction">
+			<param name="actionName">staffHome</param>
+			<param name="sessionToken">${sessionToken}</param>
+		</result>
+	</action>
+	<action name="staffManage" class="ubc.ece419.pod10.action.staff.StaffGetCustomerAction" method="getEmailInput">
+		<param name="sessionToken">sessionToken</param>
+		<result name="success" type="freemarker">/staffManage.ftl</result>
+		<result name="login" type="redirect">/staffSignIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="staffModifyTicket" class="ubc.ece419.pod10.action.staff.StaffModifyTicketAction" method="execute">
+		<param name="ticketId">ticketId</param><param name="passengerName">passengerName</param>
+		<param name="seatPreference">seatPreference</param>
+		<param name="mealPreference">mealPreference</param>
+		<param name="sessionToken">sessionToken</param>
+		<param name="customerToken">customerToken</param>		
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+		<result name="login" type="redirect">/staffSignIn.ftl</result>
+		<result name="success" type="freemarker">/staffModifyTicket.ftl</result>	
+	</action>
+	<action name="staffModifyTicketGui" class="ubc.ece419.pod10.action.staff.StaffModifyTicketAction" method="getModifyTicketGuiInput">
+		<param name="ticketId">ticketId</param><param name="sessionToken">sessionToken</param><param name="customerToken">customerToken</param>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+		<result name="login" type="redirect">/staffSignIn.ftl</result>
+		<result name="success" type="freemarker">/staffModifyTicket_gui.ftl</result>
+	</action>
+	<action name="staffSignIn" class="ubc.ece419.pod10.action.BaseAction" method="input">
+		<result type="freemarker">/staffSignIn.ftl</result>
+	</action>
+	<action name="staffViewBooking" class="ubc.ece419.pod10.action.staff.StaffViewBookingAction" method="execute">
+		<param name="bookingId">bookingId</param>
+		<param name="sessionToken">sessionToken</param>
+		<param name="customerToken">customerToken</param>
+		<result type="freemarker">/staffViewBooking.ftl</result>
+		<result name="login" type="redirect">/staffSignIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="staffViewBookingList" class="ubc.ece419.pod10.action.staff.StaffViewBookingListAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<param name="customerToken">customerToken</param>
+		<result type="freemarker">/staffViewBookingList.ftl</result>
+		<result name="login" type="redirect">/staffSignIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="viewBooking" class="ubc.ece419.pod10.action.user.ViewBookingAction" method="execute">
+		<param name="bookingId">bookingId</param>
+		<param name="sessionToken">sessionToken</param>
+		<result type="freemarker">/viewBooking.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="viewBookingList" class="ubc.ece419.pod10.action.user.ViewBookingListAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<result type="freemarker">/viewBookingList.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="viewManifest" class="ubc.ece419.pod10.action.staff.ViewManifestAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<param name="flightManifest_flightId">flightManifest_flightId</param>
+		<result type="freemarker">/flightManifest.ftl</result>
+		<result name="login" type="redirect">/staffSignIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="viewStatistics" class="ubc.ece419.pod10.action.staff.ViewStatisticsAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+		<result name="login" type="redirect">/staffSignIn.ftl</result>
+		<result name="success" type="freemarker">/viewStatistics.ftl</result>
+	</action>
+	<action name="viewTransactions" class="ubc.ece419.pod10.action.user.ViewTransactionHistoryAction" method="execute">
+		<param name="sessionToken">sessionToken</param>
+		<result type="freemarker">/transactions.ftl</result>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+	</action>
+	<action name="viewUpcomingFlights" class="ubc.ece419.pod10.action.user.ViewBoardingPassAction" method="input">
+		<param name="sessionToken">sessionToken</param>
+		<result name="login" type="redirect">/signIn.ftl</result>
+		<result name="error" type="redirect">/InternalServerError.ftl</result>
+		<result name="success" type="freemarker">/upcomingFlights.ftl</result>
+	</action>
+	<action name="*">
+		<result type="freemarker">/404NotFoundError.ftl</result>
+	</action>
+	
+    </package>
+</struts>
